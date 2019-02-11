@@ -1,0 +1,12 @@
+<svg id="svg24" width="28" height="28" version="1.1" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+ <defs id="defs7">
+  <linearGradient id="linearGradient5232" x1="46.706837" x2="121.70683" y1="6.5279498" y2="81.527946" gradientTransform="matrix(.28 0 0 .28 -13.077914 -1.827826)" gradientUnits="userSpaceOnUse">
+   <stop id="stop2" style="stop-color:#aaaaac" offset="0"/>
+   <stop id="stop4" style="stop-color:#ffffff;stop-opacity:0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g id="spinner">
+  <rect id="rect14" x="-3.7060548e-7" y="7.6293945e-6" width="28" height="28" style="fill-opacity:0;stroke-width:.21538462"/>
+  <path id="path16" d="M 14.000001,0 C 6.268013,0 0,6.2680128 0,14 0,21.731987 6.268013,28 14.000001,28 21.731985,28 28,21.731987 28,14 28,6.2680128 21.731985,0 14.000001,0 Z m 0,2.8 C 20.18559,2.8 25.2,7.8144108 25.2,14 25.2,20.185589 20.18559,25.2 14.000001,25.2 7.814411,25.2 2.8,20.185589 2.8,14 2.8,7.8144108 7.814411,2.8 14.000001,2.8 Z" style="fill:url(#linearGradient5232);stroke-width:.28"/>
+ </g>
+</svg>
