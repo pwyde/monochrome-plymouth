@@ -5,7 +5,7 @@
 ## About
 Monochrome Plymouth is a fork of the well known [Breeze Plymouth](https://github.com/KDE/breeze-plymouth) theme created by [KDE](https://www.kde.org/). This fork was created to complement the [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde) theme for the Plasma 5 desktop environment.
 
-The original theme has been modified with the folowing:
+The original theme has been modified with the following:
 
 - Custom colour palette.
 - Added support for custom fonts.
@@ -16,15 +16,15 @@ The original theme has been modified with the folowing:
   - Partial support using the provided install [script](install.sh). See [details](README.md#details) below.
 
 ### Details
-Both this and the original theme relies on that the necesary files are included into the **initramfs** image. This is acomplished with the help of *build hooks*, which are sourced by the shell during runtime of *mkinitcpio* or *mkinitramfs* (depends on distribution).
+Both this and the original theme relies on that the necesary files are included into the **initramfs** image. This is accomplished with the help of *build hooks*, which are sourced by the shell during runtime of *mkinitcpio* or *mkinitramfs* (depending on distribution).
 
-The original theme uses the Plymouth *[label](https://github.com/Jolicloud/plymouth/tree/master/src/plugins/controls/label)* [plugin](https://github.com/Jolicloud/plymouth/tree/master/src/plugins) to display text elements. Hence it must be added into the initramfs image along with its dependencies (i.e. [Pango](https://www.pango.org/)). This is not performed on all distributions. Arch Linux for example does not and is solved by the Arch Linux specific [hook](hooks/monochrome-plymouth).
+The original theme uses the Plymouth *[label](https://github.com/Jolicloud/plymouth/tree/master/src/plugins/controls/label)* [plugin](https://github.com/Jolicloud/plymouth/tree/master/src/plugins) to display text elements. Hence it must be added into the initramfs image along with its dependencies (i.e. [Pango](https://www.pango.org/)). This is not performed on all distributions. Arch Linux for example, does not and is solved by the Arch Linux specific [hook](hooks/monochrome-plymouth).
 
 To utilize the custom font support in the theme, font releated files must also be included into the initramfs image. The provided install [script](install.sh) tries to identify the distribution in use and install the required build [hook](hooks) for that particular distribution. If no custom font is specified, the default font *Noto Sans* will be used. Since this theme was created to complement the Plasma theme [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde), it is assumed that [Noto](https://www.google.com/get/noto/) fonts are already installed.
 
 The install [script](install.sh) will also automatically change which logotype to display depending on which distribution is identified.
 
-See [limitations](README.md#limitations) below for more information and which distributions are supported and other limitations.
+See [limitations](README.md#limitations) below for more information and which distributions are supported.
 
 ## Limitations
 At the time of writing not all distributions are supported, see list below. This is due to the fact that the theme relies on distribution specific build hooks.
@@ -37,7 +37,7 @@ Supported distributions:
 Support for more distributions will hopefully be added in the future.
 
 ### Fonts
-If a custom font is specified, the source font file __must__ be located in the system location of `/usr/share/fonts`. Otherwise the theme will not work properly. User specific font locations such as `~/.fonts` is not supported.
+If a custom font is specified, the source font file __must__ be located in the system fonts location of `/usr/share/fonts`. Otherwise the theme will not work properly. User specific font locations such as `~/.fonts` is not supported.
 
 ## Install Instructions
 At the time of writing there are no packages available. Install the theme manually using `git clone` and see below for further instructions.
@@ -66,6 +66,7 @@ sh install -i -f /usr/share/fonts/TTF/DejaVuSans.ttf
 | `-i` | Install theme in default location. |
 | `-u` | Uninstall theme. |
 | `-f` | Specify custom font to use. If not specified, *Noto Sans* will be used as the default. |
+| `-h` | Display help message including available options. |
 
 ### Arch Linux
 After using the install script, add the custom build hook `monochrome-plymouth` to the `HOOKS` array in the `/etc/mkinitcpio.conf` configuration file.
