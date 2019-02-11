@@ -47,17 +47,17 @@ The installation script will automatically download the latest version from the 
 
 #### Install
 ```
-sh install.sh -i
+bash install.sh -i
 ```
 
 #### Uninstall
 ```
-sh install.sh -u
+bash install.sh -u
 ```
 
 #### Install with custom font
 ```
-sh install -i -f /usr/share/fonts/TTF/DejaVuSans.ttf
+bash install -i -f /usr/share/fonts/TTF/DejaVuSans.ttf
 ```
 
 #### Options
