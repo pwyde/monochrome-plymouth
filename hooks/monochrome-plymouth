@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build() {
-    # Add Plymouth plugin 'label.sp'.
+    # Add Plymouth plugin 'label.so'.
     PLYMOUTH_PLUGIN_PATH="$(plymouth --get-splash-plugin-path)"
     PLYMOUTH_MODULE_NAME="label.so"
     
