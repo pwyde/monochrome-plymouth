@@ -123,6 +123,7 @@ _download_pkg() {
 _get_distro() {
     if [[ -f "/etc/os-release" ]]; then
         # freedesktop.org and systemd
+        # shellcheck disable=SC1091 
         source /etc/os-release
         os="${NAME}"
         ver="${VERSION_ID}"
@@ -132,6 +133,7 @@ _get_distro() {
         ver=$(lsb_release -sr)
     elif [[ -f "/etc/lsb-release" ]]; then
         # For some versions of Debian/Ubuntu without lsb_release command.
+        # shellcheck disable=SC1091 
         source /etc/lsb-release
         os="${DISTRIB_ID}"
         ver="${DISTRIB_RELEASE}"
@@ -142,6 +144,7 @@ _get_distro() {
     else
         # Fall back to uname, i.e. "Linux <version>", also works for BSD, etc.
         os=$(uname -s)
+        # shellcheck disable=SC2034   
         ver=$(uname -r)
     fi
 }
