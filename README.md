@@ -49,26 +49,26 @@ The installation script will automatically download the latest version from the 
 
 #### Install
 ```
-bash install.sh -i
+sh install.sh --install
 ```
 
 #### Uninstall
 ```
-bash install.sh -u
+sh install.sh --uninstall
 ```
 
 #### Install with custom font
 ```
-bash install -i -f /usr/share/fonts/TTF/DejaVuSans.ttf
+sh install --install --font /usr/share/fonts/TTF/DejaVuSans.ttf
 ```
 
 #### Options
-| **Option** | **Description** |
-| --- | --- |
-| `-i` | Install theme in default location. |
-| `-u` | Uninstall theme. |
-| `-f` | Specify custom font to use. If not specified, *Noto Sans* will be used as the default. |
-| `-h` | Display help message including available options. |
+| **Option**         | **Description**                                                                        |
+| ---                | ---                                                                                    |
+| `-i`,`--install`   | Install theme in default location (`/usr/share`).                                      |
+| `-u`,`--uninstall` | Uninstall theme.                                                                       |
+| `-f`,`--font`      | Specify custom font to use. If not specified, *Noto Sans* will be used as the default. |
+| `-h`,`--help`      | Display help message including available options.                                      |
 
 ### Arch Linux
 After using the install script, add the custom build hook `monochrome-plymouth` to the `HOOKS` array in the `/etc/mkinitcpio.conf` configuration file.
