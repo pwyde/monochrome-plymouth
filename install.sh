@@ -28,18 +28,18 @@ temp_file="$(mktemp -u)"
 temp_dir="$(mktemp -d)"
 
 _print_header() {
-echo "                                             
- _____                 _                     
-|     |___ ___ ___ ___| |_ ___ ___ _____ ___ 
+echo "
+ _____                 _
+|     |___ ___ ___ ___| |_ ___ ___ _____ ___
 | | | | . |   | . |  _|   |  _| . |     | -_|
 |_|_|_|___|_|_|___|___|_|_|_| |___|_|_|_|___|
-                                             
- _____ _                   _   _             
-|  _  | |_ _ _____ ___ _ _| |_| |_           
-|   __| | | |     | . | | |  _|   |          
-|__|  |_|_  |_|_|_|___|___|_| |_|_|          
-        |___|                                
-                                                                  
+
+ _____ _                   _   _
+|  _  | |_ _ _____ ___ _ _| |_| |_
+|   __| | | |     | . | | |  _|   |
+|__|  |_|_  |_|_|_|___|___|_| |_|_|
+        |___|
+
   $git_desc
   https://gitlab.com/pwyde/$git_repo
 " >&2
@@ -56,12 +56,12 @@ Examples:
   Install: ${0} --install
   Uninstall: ${0} --uninstall
   Install with specified font: ${0} --install --font <path>
- 
+
 Options:
   -i, --install      Install theme in default location (${prefix}).
- 
+
   -u, --uninstall    Uninstall theme.
-  
+
   -f, --font         If not specified, 'Noto Sans' will be used as the default
                      font. Install theme with specified font instead, i.e.
                      '/usr/share/fonts/TTF/DejaVuSans.ttf'.
@@ -74,7 +74,7 @@ if [[ "${#}" -le 0 ]]; then
     _print_help
     exit 1
 fi
- 
+
 # Loop as long as there is at least one more argument.
 while [[ "${#}" -gt 0 ]]; do
     arg="${1}"
@@ -98,7 +98,7 @@ while [[ "${#}" -gt 0 ]]; do
 done
 
 _print_msg() {
-    echo "=>" "${@}" >&2
+    echo "=>" "${@}" >&1
 }
 
 # Delete parent directories if empty.
@@ -123,7 +123,7 @@ _download_pkg() {
 _get_distro() {
     if [[ -f "/etc/os-release" ]]; then
         # freedesktop.org and systemd
-        # shellcheck disable=SC1091 
+        # shellcheck disable=SC1091
         source /etc/os-release
         os="${NAME}"
         ver="${VERSION_ID}"
@@ -133,7 +133,7 @@ _get_distro() {
         ver=$(lsb_release -sr)
     elif [[ -f "/etc/lsb-release" ]]; then
         # For some versions of Debian/Ubuntu without lsb_release command.
-        # shellcheck disable=SC1091 
+        # shellcheck disable=SC1091
         source /etc/lsb-release
         os="${DISTRIB_ID}"
         ver="${DISTRIB_RELEASE}"
@@ -144,7 +144,7 @@ _get_distro() {
     else
         # Fall back to uname, i.e. "Linux <version>", also works for BSD, etc.
         os=$(uname -s)
-        # shellcheck disable=SC2034   
+        # shellcheck disable=SC2034
         ver=$(uname -r)
     fi
 }
