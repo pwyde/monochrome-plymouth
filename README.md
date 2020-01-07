@@ -59,7 +59,7 @@ sh install.sh --uninstall
 
 #### Install with custom font
 ```
-sh install --install --font /usr/share/fonts/TTF/DejaVuSans.ttf
+sh install.sh --install --font /usr/share/fonts/TTF/DejaVuSans.ttf
 ```
 
 #### Options
