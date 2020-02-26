@@ -36,3 +36,12 @@
     - Specific instructions for KDE Neon.
   - Updated credits.
   - Updated todo list.
+
+## Install Script - 27 February 2020
+
+- Complete rewrite of installation script:
+  - Colourized script output.
+  - Added 'print_error' function.
+  - Added 'print_status' function.
+  - Added ping test before downloading from Git hosting provider.
+  - Minor changes to script syntax.
