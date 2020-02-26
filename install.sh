@@ -17,19 +17,38 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Configure script variables.
+status=""
+git_hosting="gitlab.com"
 git_repo="monochrome-plymouth"
 git_desc="Monochrome Plymouth"
 prefix="/usr/share"
-tag="master"
+tag="dev"
 install="false"
 uninstall="false"
+## Colorize output.
+# shellcheck disable=SC2034
+red="\033[91m"
+# shellcheck disable=SC2034
+green="\033[92m"
+# shellcheck disable=SC2034
+blue="\033[94m"
+# shellcheck disable=SC2034
+yellow="\033[93m"
+# shellcheck disable=SC2034
+cyan="\033[96m"
+# shellcheck disable=SC2034
+magenta="\033[95m"
+# shellcheck disable=SC2034
+white="\033[1m"
+# shellcheck disable=SC2034
+no_color="\033[0m"
 
 temp_file="$(mktemp -u)"
 temp_dir="$(mktemp -d)"
 
-_print_header() {
-echo "
- _____                 _
+print_header() {
+echo -e "
+ ${blue}_____                 _
 |     |___ ___ ___ ___| |_ ___ ___ _____ ___
 | | | | . |   | . |  _|   |  _| . |     | -_|
 |_|_|_|___|_|_|___|___|_|_|_| |___|_|_|_|___|
@@ -38,31 +57,31 @@ echo "
 |  _  | |_ _ _____ ___ _ _| |_| |_
 |   __| | | |     | . | | |  _|   |
 |__|  |_|_  |_|_|_|___|___|_| |_|_|
-        |___|
+        |___|${no_color}
 
-  $git_desc
-  https://gitlab.com/pwyde/$git_repo
+  ${yellow}${git_desc}${no_color}
+  https://${git_hosting}/pwyde/${git_repo}
 " >&2
 }
 
-_print_help() {
-echo "
-Description:
+print_help() {
+echo -e "
+${white}Description:${no_color}
   Install script for the ${git_desc} theme.
   Script will automatically download the latest version from the Git repository
   and copy the required files to '${prefix}'.
 
-Examples:
+${white}Examples:${no_color}
   Install: ${0} --install
   Uninstall: ${0} --uninstall
   Install with specified font: ${0} --install --font <path>
 
-Options:
-  -i, --install      Install theme in default location (${prefix}).
+${white}Options:${no_color}
+  ${cyan}-i${no_color}, ${cyan}--install${no_color}      Install theme in default location (${prefix}).
 
-  -u, --uninstall    Uninstall theme.
+  ${cyan}-u${no_color}, ${cyan}--uninstall${no_color}    Uninstall theme.
 
-  -f, --font         If not specified, 'Noto Sans' will be used as the default
+  ${cyan}-f${no_color}, ${cyan}--font${no_color}         If not specified, 'Noto Sans' will be used as the default
                      font. Install theme with specified font instead, i.e.
                      '/usr/share/fonts/TTF/DejaVuSans.ttf'.
 " >&2
@@ -70,13 +89,13 @@ Options:
 
 # Print help if no argument is specified.
 if [[ "${#}" -le 0 ]]; then
-    _print_header
-    _print_help
+    print_header
+    print_help
     exit 1
 fi
 
 # Loop as long as there is at least one more argument.
-while [[ "${#}" -gt 0 ]]; do
+while [ "${#}" -gt 0 ]; do
     arg="${1}"
     case "${arg}" in
         # This is an arg value type option. Will catch both '-i' or
@@ -90,38 +109,64 @@ while [[ "${#}" -gt 0 ]]; do
         -f|--font) shift; font_path="${1}" ;;
         # This is an arg value type option. Will catch both '-h' or
         # '--help' value.
-        -h|--help) _print_header; _print_help; exit ;;
-        *) echo "Invalid option '${arg}'." >&2; _print_header; _print_help; exit 1 ;;
+        -h|--help) print_header; print_help; exit ;;
+        *) echo "Invalid option '${arg}'." >&2; print_header; print_help; exit 1 ;;
     esac
     # Shift after checking all the cases to get the next option.
-    shift
+    shift > /dev/null 2>&1;
 done
 
-_print_msg() {
-    echo "=>" "${@}" >&1
+print_msg() {
+    echo -e "$green=>$no_color$white" "$@" "$no_color" >&1
+}
+
+print_error() {
+    echo -e "$red=> ERROR:$no_color$white" "$@" "$no_color" >&1
+}
+
+print_status() {
+    if [ -z "${status}" ]; then
+        print_msg "Completed!"
+    else
+        print_error "Completed with errors!"
+    fi
 }
 
 # Delete parent directories if empty.
-_delete_dir() {
+delete_dir() {
     sudo rm -rf "${1}"
     sudo rmdir -p "$(dirname "${1}")" 2>/dev/null || true
 }
 
-_cleanup() {
+cleanup() {
     rm -rf "${temp_file}" "${temp_dir}"
-    _print_msg "Completed!"
+    if [ -e "${temp_file}" ]; then
+        print_error "Unable to delete temporary file '${temp_file}'!"
+        status=1
+    fi
+    if [ -e "${temp_dir}" ]; then
+        print_error "Unable to delete temporary directory '${temp_dir}'!"
+        status=1
+    fi
 }
 
-_download_pkg() {
-    _print_msg "Downloading latest version from master branch..."
-    wget -O "${temp_file}" "https://gitlab.com/pwyde/${git_repo}/-/archive/${tag}/${git_repo}-${tag}.tar.gz"
-    _print_msg "Extracting archive ..."
-    tar -xzf "${temp_file}" -C "${temp_dir}"
+download_pkg() {
+    # Test if Git hosting provider is reachable.
+    print_msg "Verifying that Git hosting provider ($git_hosting) is reachable..."
+    if ping -c 5 "${git_hosting}" >/dev/null 2>&1; then
+        print_msg "Downloading latest version from $tag branch..."
+    wget --progress=bar:force --output-document "${temp_file}" "https://${git_hosting}/pwyde/${git_repo}/-/archive/${tag}/${git_repo}-${tag}.tar.gz"
+        print_msg "Extracting archive..."
+        tar -xzf "${temp_file}" -C "${temp_dir}"
+    else
+        print_error "Unable to communicate with Git hosting provider ($git_hosting)! Exiting..."
+        exit 1
+    fi
 }
 
 # Try to identify distro.
-_get_distro() {
-    if [[ -f "/etc/os-release" ]]; then
+get_distro() {
+    if [ -f "/etc/os-release" ]; then
         # freedesktop.org and systemd
         # shellcheck disable=SC1091
         source /etc/os-release
@@ -131,13 +176,13 @@ _get_distro() {
         # Linux Standard Base (LSB), linuxbase.org
         os=$(lsb_release -si)
         ver=$(lsb_release -sr)
-    elif [[ -f "/etc/lsb-release" ]]; then
+    elif [ -f "/etc/lsb-release" ]; then
         # For some versions of Debian/Ubuntu without lsb_release command.
         # shellcheck disable=SC1091
         source /etc/lsb-release
         os="${DISTRIB_ID}"
         ver="${DISTRIB_RELEASE}"
-    elif [[ -f "/etc/debian_version" ]]; then
+    elif [ -f "/etc/debian_version" ]; then
         # Older Debian/Ubuntu/etc.
         os=Debian
         ver=$(cat /etc/debian_version)
@@ -151,12 +196,12 @@ _get_distro() {
 
 # Configure theme with identified distro.
 # Note: At the moment only Arch Linux and KDE neon is supported.
-_set_distro() {
-    if [[ -n "${os}" ]]; then
-        if [[ "${os}" = "Arch Linux" ]]; then
+set_distro() {
+    if [ -n "${os}" ]; then
+        if [ "${os}" = "Arch Linux" ]; then
             sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
             sed -i "s/<distro logo>/arch-linux/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
-        elif [[ "${os}" = "KDE neon" ]]; then
+        elif [ "${os}" = "KDE neon" ]; then
             sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
             sed -i "s/<distro logo>/kde-neon/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
         else
@@ -168,9 +213,9 @@ _set_distro() {
 }
 
 # Configure theme with custom font if specified.
-_install_font() {
-    if [[ -f "$font_path" ]]; then
-        _print_msg "Adding custom font '${font_path}'..."
+install_font() {
+    if [ -f "$font_path" ]; then
+        print_msg "Adding custom font '${font_path}'..."
         font_name=$(fc-list | grep "${font_path}" | awk -F ":" '{print $2}' | sed "s/ //")
         sed -i "s/Noto Sans/${font_name}/g" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
         # Configure build hooks with specified custom font.
@@ -179,14 +224,14 @@ _install_font() {
             sed -i "s/###//" "${filename}"
         done
     else
-        _print_msg "The specified font '${font_path}' is missing!"
-        _print_msg "Skipping custom font installation..."
-        _clean_hooks
+        print_error "The specified font '${font_path}' is missing!"
+        print_msg "Skipping custom font installation..."
+        clean_hooks
     fi
 }
 
 # Remove custom font preperation in build hooks.
-_clean_hooks() {
+clean_hooks() {
     for filename in "${temp_dir}"/"${git_repo}"-"${tag}"/hooks/*; do
         sed -i "/custom_font_path/d" "${filename}"
         sed -i "/Add custom font/d" "${filename}"
@@ -194,58 +239,62 @@ _clean_hooks() {
     done
 }
 
-_install_pkg() {
-    _print_msg "Installing ${git_desc} to '${prefix}'..."
+install_pkg() {
+    print_msg "Installing ${git_desc} to '${prefix}'..."
     sudo cp -R "${temp_dir}/${git_repo}-${tag}/monochrome" "${prefix}/plymouth/themes"
 }
 
 # Install build hooks.
 # Note: At the moment only Arch Linux and KDE neon is supported.
-_install_hooks() {
-    if [[ -n "${os}" ]]; then
+install_hooks() {
+    if [ -n "${os}" ]; then
         # Install build hook for Arch Linux.
-        if [[ "${os}" = "Arch Linux" ]]; then
+        if [ "${os}" = "Arch Linux" ]; then
             sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/monochrome-plymouth" "/etc/initcpio/install"
         # Install build hook for KDE Neon.
-        elif [[ "${os}" = "KDE neon" ]]; then
+        elif [ "${os}" = "KDE neon" ]; then
             sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/plymouth_monochrome" "/usr/share/initramfs-tools/hooks"
         fi
     else
-        _print_msg "Could not identify distribution. Unable to install build hook!"
-        _print_msg "Monochrome Plymouth may not work properly!"
+        print_error "Could not identify distribution. Unable to install build hook!"
+        print_error "Monochrome Plymouth may not work properly!"
+        status=1
     fi
 }
 
-_uninstall_pkg() {
-    if [[ -d "${prefix}/plymouth/themes/monochrome" ]]; then
-        _print_msg "Uninstalling ${git_desc}..."
-        _delete_dir "${prefix}/plymouth/themes/monochrome"
+uninstall_pkg() {
+    if [ -d "${prefix}/plymouth/themes/monochrome" ]; then
+        print_msg "Uninstalling ${git_desc}..."
+        delete_dir "${prefix}/plymouth/themes/monochrome"
     else
-        _print_msg "Could not find ${git_desc}! Probably not installed."
+        print_error "Could not find ${git_desc}! Probably not installed."
+        status=1
     fi
 }
 
-if [[ "${uninstall}" = "false" && "${install}" = "true" ]]; then
-    _print_header
-    _download_pkg
-    _get_distro
-    _set_distro
-    if [[ -n "$font_path" ]]; then
-        _install_font
+if [ "${uninstall}" = "false" ] && [ "${install}" = "true" ]; then
+    print_header
+    download_pkg
+    get_distro
+    set_distro
+    if [ -n "$font_path" ]; then
+        install_font
     else
-        _clean_hooks
+        clean_hooks
     fi
-    _install_pkg
-    _install_hooks
-    _cleanup
-elif [[ "${uninstall}" = "true" && "${install}" = "false" ]]; then
-    _print_header
-    _download_pkg
-    _uninstall_pkg
-    _cleanup
+    install_pkg
+    install_hooks
+    cleanup
+    print_status
+elif [ "${uninstall}" = "true" ] && [ "${install}" = "false" ]; then
+    print_header
+    download_pkg
+    uninstall_pkg
+    cleanup
+    print_status
 else
-    _print_msg "Missing or invalid options, see help below."
-    _print_header
-    _print_help
+    print_msg "Missing or invalid options, see help below."
+    print_header
+    print_help
     exit 1
 fi
