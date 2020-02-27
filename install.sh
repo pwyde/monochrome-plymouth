@@ -248,14 +248,14 @@ clean_hooks() {
 install_theme() {
     print_msg "Installing ${git_desc} to '${prefix}'..."
     sudo cp -R "${temp_dir}/${git_repo}-${tag}/monochrome" "${prefix}/plymouth/themes"
-    if [ ! -e "${prefix}/plymouth/themes" ]; then
+    if [ ! -d "${prefix}/plymouth/themes/monochrome" ]; then
         print_error "Unable to install '${prefix}/plymouth/themes'!"
         status=1
     fi
 }
 
 # Install build hooks.
-# Note: At the moment only Arch Linux and KDE neon is supported.
+# Note: Not all distributions are supported!
 install_hooks() {
     if [ -n "${os}" ]; then
         # Install build hook for Arch Linux.
@@ -289,7 +289,18 @@ uninstall_theme() {
 }
 
 uninstall_hooks() {
-    echo "Place-holder for uninstalling hooks..."
+    # Uninstall build hook for Arch Linux.
+    if [ -f "/etc/initcpio/install/monochrome-plymouth" ]; then
+        print_msg "Uninstalling build hook 'monochrome-plymouth'..."
+        delete_dir "/etc/initcpio/install/monochrome-plymouth"
+    # Uninstall build hook for KDE Neon.
+    elif [ -f "/usr/share/initramfs-tools/hooks/plymouth_monochrome" ]; then
+        print_msg "Uninstalling build hook 'plymouth_monochrome'..."
+        delete_dir "/usr/share/initramfs-tools/hooks/plymouth_monochrome"
+    else
+        print_error "Could not find build hook! Probably not installed."
+        status=1
+    fi
 }
 
 if [ "${uninstall}" = "false" ] && [ "${install}" = "true" ]; then
