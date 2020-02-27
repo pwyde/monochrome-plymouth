@@ -247,9 +247,9 @@ clean_hooks() {
 
 install_theme() {
     print_msg "Installing ${git_desc} to '${prefix}'..."
-    sudo cp -R "${temp_dir}/${git_repo}-${tag}/monochrome" "${prefix}/plymouth/themes"
+    sudo cp -R "${temp_dir}/${git_repo}-${tag}/monochrome" "${prefix}/plymouth/themes" 2>/dev/null
     if [ ! -d "${prefix}/plymouth/themes/monochrome" ]; then
-        print_error "Unable to install '${prefix}/plymouth/themes'!"
+        print_error "Unable to install '${prefix}/plymouth/themes/monochrome'!"
         status=1
     fi
 }
@@ -261,11 +261,11 @@ install_hooks() {
         # Install build hook for Arch Linux.
         if [ "${os}" = "Arch Linux" ]; then
             print_msg "Installing build hook for '${os}'..."
-            sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/monochrome-plymouth" "/etc/initcpio/install"
+            sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/monochrome-plymouth" "/etc/initcpio/install" 2>/dev/null
         # Install build hook for KDE Neon.
         elif [ "${os}" = "KDE neon" ]; then
             print_msg "Installing build hook for '${os}'..."
-            sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/plymouth_monochrome" "/usr/share/initramfs-tools/hooks"
+            sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/plymouth_monochrome" "/usr/share/initramfs-tools/hooks" 2>/dev/null
         else
             print_error "Un-supported distribution identified. Unable to install build hook!"
             print_error "Monochrome Plymouth may not work properly!"
