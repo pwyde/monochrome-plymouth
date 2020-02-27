@@ -195,37 +195,43 @@ get_distro() {
 }
 
 # Configure theme with identified distro.
-# Note: At the moment only Arch Linux and KDE neon is supported.
-set_distro() {
+# Note: Not all distributions are supported!
+conf_theme() {
     if [ -n "${os}" ]; then
         if [ "${os}" = "Arch Linux" ]; then
+            print_msg "Identified supported distribution as '${os}'..."
             sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
             sed -i "s/<distro logo>/arch-linux/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
         elif [ "${os}" = "KDE neon" ]; then
+            print_msg "Identified supported distribution as '${os}'..."
             sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
             sed -i "s/<distro logo>/kde-neon/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
         else
+            print_error "Identified un-supported distribution as '${os}'..."
             sed -i "s/<distro logo>/tux/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
         fi
     else
+        print_error "Could not identify distribution!"
         sed -i "s/<distro>//" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
     fi
-}
-
-# Configure theme with custom font if specified.
-install_font() {
-    if [ -f "$font_path" ]; then
-        print_msg "Adding custom font '${font_path}'..."
-        font_name=$(fc-list | grep "${font_path}" | awk -F ":" '{print $2}' | sed "s/ //")
-        sed -i "s/Noto Sans/${font_name}/g" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
-        # Configure build hooks with specified custom font.
-        for filename in "${temp_dir}"/"${git_repo}"-"${tag}"/hooks/*; do
-            sed -i "s|<font path>|${font_path}|" "${filename}"
-            sed -i "s/###//" "${filename}"
-        done
+    # Check if custom font is specified.
+    if [ -n "$font_path" ]; then
+        # Configure theme with custom font if specified.
+        if [ -f "$font_path" ]; then
+            print_msg "Adding custom font '${font_path}'..."
+            font_name=$(fc-list | grep "${font_path}" | awk -F ":" '{print $2}' | sed "s/ //")
+            sed -i "s/Noto Sans/${font_name}/g" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
+            # Configure build hooks with specified custom font.
+            for filename in "${temp_dir}"/"${git_repo}"-"${tag}"/hooks/*; do
+                sed -i "s|<font path>|${font_path}|" "${filename}"
+                sed -i "s/###//" "${filename}"
+            done
+        else
+            print_error "The specified font '${font_path}' is missing!"
+            print_msg "Skipping custom font installation..."
+            clean_hooks
+        fi
     else
-        print_error "The specified font '${font_path}' is missing!"
-        print_msg "Skipping custom font installation..."
         clean_hooks
     fi
 }
@@ -239,9 +245,13 @@ clean_hooks() {
     done
 }
 
-install_pkg() {
+install_theme() {
     print_msg "Installing ${git_desc} to '${prefix}'..."
     sudo cp -R "${temp_dir}/${git_repo}-${tag}/monochrome" "${prefix}/plymouth/themes"
+    if [ ! -e "${prefix}/plymouth/themes" ]; then
+        print_error "Unable to install '${prefix}/plymouth/themes'!"
+        status=1
+    fi
 }
 
 # Install build hooks.
@@ -250,10 +260,16 @@ install_hooks() {
     if [ -n "${os}" ]; then
         # Install build hook for Arch Linux.
         if [ "${os}" = "Arch Linux" ]; then
+            print_msg "Installing build hook for '${os}'..."
             sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/monochrome-plymouth" "/etc/initcpio/install"
         # Install build hook for KDE Neon.
         elif [ "${os}" = "KDE neon" ]; then
+            print_msg "Installing build hook for '${os}'..."
             sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/plymouth_monochrome" "/usr/share/initramfs-tools/hooks"
+        else
+            print_error "Un-supported distribution identified. Unable to install build hook!"
+            print_error "Monochrome Plymouth may not work properly!"
+            status=1
         fi
     else
         print_error "Could not identify distribution. Unable to install build hook!"
@@ -262,7 +278,7 @@ install_hooks() {
     fi
 }
 
-uninstall_pkg() {
+uninstall_theme() {
     if [ -d "${prefix}/plymouth/themes/monochrome" ]; then
         print_msg "Uninstalling ${git_desc}..."
         delete_dir "${prefix}/plymouth/themes/monochrome"
@@ -272,24 +288,25 @@ uninstall_pkg() {
     fi
 }
 
+uninstall_hooks() {
+    echo "Place-holder for uninstalling hooks..."
+}
+
 if [ "${uninstall}" = "false" ] && [ "${install}" = "true" ]; then
     print_header
     download_pkg
     get_distro
-    set_distro
-    if [ -n "$font_path" ]; then
-        install_font
-    else
-        clean_hooks
-    fi
-    install_pkg
+    conf_theme
+    install_theme
     install_hooks
     cleanup
     print_status
 elif [ "${uninstall}" = "true" ] && [ "${install}" = "false" ]; then
     print_header
     download_pkg
-    uninstall_pkg
+    get_distro
+    uninstall_theme
+    uninstall_hooks
     cleanup
     print_status
 else
