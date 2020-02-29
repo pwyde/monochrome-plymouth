@@ -202,6 +202,10 @@ conf_theme() {
             print_msg "Identified supported distribution as '${os}'..."
             sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
             sed -i "s/<distro logo>/arch-linux/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
+        elif [ "${os}" = "Manjaro Linux" ]; then
+            print_msg "Identified supported distribution as '${os}'..."
+            sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
+            sed -i "s/<distro logo>/manjaro/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
         elif [ "${os}" = "KDE neon" ]; then
             print_msg "Identified supported distribution as '${os}'..."
             sed -i "s/<distro name>/${os}/" "${temp_dir}/${git_repo}-${tag}/monochrome/monochrome.script"
@@ -260,6 +264,10 @@ install_hooks() {
     if [ -n "${os}" ]; then
         # Install build hook for Arch Linux.
         if [ "${os}" = "Arch Linux" ]; then
+            print_msg "Installing build hook for '${os}'..."
+            sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/monochrome-plymouth" "/etc/initcpio/install" 2>/dev/null
+        # Install build hook for Manjaro.
+        elif [ "${os}" = "Manjaro Linux" ]; then
             print_msg "Installing build hook for '${os}'..."
             sudo cp "${temp_dir}/${git_repo}-${tag}/hooks/monochrome-plymouth" "/etc/initcpio/install" 2>/dev/null
         # Install build hook for KDE Neon.
