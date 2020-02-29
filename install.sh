@@ -297,7 +297,7 @@ uninstall_theme() {
 }
 
 uninstall_hooks() {
-    # Uninstall build hook for Arch Linux.
+    # Uninstall build hook for Manjaro and Arch Linux.
     if [ -f "/etc/initcpio/install/monochrome-plymouth" ]; then
         print_msg "Uninstalling build hook 'monochrome-plymouth'..."
         delete_dir "/etc/initcpio/install/monochrome-plymouth"
