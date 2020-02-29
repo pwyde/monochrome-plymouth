@@ -132,10 +132,8 @@ print_status() {
     fi
 }
 
-# Delete parent directories if empty.
-delete_dir() {
+delete() {
     sudo rm -rf "${1}"
-    sudo rmdir -p "$(dirname "${1}")" 2>/dev/null || true
 }
 
 cleanup() {
@@ -289,7 +287,7 @@ install_hooks() {
 uninstall_theme() {
     if [ -d "${prefix}/plymouth/themes/monochrome" ]; then
         print_msg "Uninstalling ${git_desc}..."
-        delete_dir "${prefix}/plymouth/themes/monochrome"
+        delete "${prefix}/plymouth/themes/monochrome"
     else
         print_error "Could not find ${git_desc}! Probably not installed."
         status=1
@@ -300,12 +298,12 @@ uninstall_hooks() {
     # Uninstall build hook for Manjaro and Arch Linux.
     if [ -f "/etc/initcpio/install/monochrome-plymouth" ]; then
         print_msg "Uninstalling build hook 'monochrome-plymouth'..."
-        delete_dir "/etc/initcpio/install/monochrome-plymouth"
+        delete "/etc/initcpio/install/monochrome-plymouth"
         sudo sed -i "s/monochrome-plymouth//" /etc/mkinitcpio.conf
     # Uninstall build hook for KDE Neon.
     elif [ -f "/usr/share/initramfs-tools/hooks/plymouth_monochrome" ]; then
         print_msg "Uninstalling build hook 'plymouth_monochrome'..."
-        delete_dir "/usr/share/initramfs-tools/hooks/plymouth_monochrome"
+        delete "/usr/share/initramfs-tools/hooks/plymouth_monochrome"
     else
         print_error "Could not find build hook! Probably not installed."
         status=1
