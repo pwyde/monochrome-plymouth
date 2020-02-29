@@ -301,6 +301,7 @@ uninstall_hooks() {
     if [ -f "/etc/initcpio/install/monochrome-plymouth" ]; then
         print_msg "Uninstalling build hook 'monochrome-plymouth'..."
         delete_dir "/etc/initcpio/install/monochrome-plymouth"
+        sudo sed -i "s/monochrome-plymouth//" /etc/mkinitcpio.conf
     # Uninstall build hook for KDE Neon.
     elif [ -f "/usr/share/initramfs-tools/hooks/plymouth_monochrome" ]; then
         print_msg "Uninstalling build hook 'plymouth_monochrome'..."
