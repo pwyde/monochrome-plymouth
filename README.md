@@ -18,13 +18,13 @@ The original theme has been modified with the following:
   - Partial support using the provided install [script](install.sh). See [details](README.md#details) below.
 
 ### Details
-To work properly, the theme depends on that all the necesary files are included into the **initramfs** image. This is accomplished with the help of *build hooks*, which are sourced by the shell during runtime of *mkinitcpio* or *mkinitramfs* (depending on distribution).
+To be fully functional, the theme must have all the necesary files included into the **initramfs** image. This is accomplished with the help of *build hooks*, which are sourced by the shell during runtime of *mkinitcpio* or *mkinitramfs* (depending on distribution).
 
 The original theme uses the Plymouth *[label](https://github.com/Jolicloud/plymouth/tree/master/src/plugins/controls/label)* [plugin](https://github.com/Jolicloud/plymouth/tree/master/src/plugins) to display text elements. Hence it must be added into the initramfs image along with its dependencies (i.e. [Pango](https://www.pango.org/)). This is not performed on all distributions. Arch Linux for example, does not and is solved by the Arch Linux specific [hook](hooks/monochrome-plymouth).
 
-To utilize the custom font support in the theme, font releated files must also be included into the initramfs image. The provided install [script](install.sh) tries to identify the distribution in use and install the required build [hook](hooks) for that particular distribution. If no custom font is specified, the default font *Noto Sans* will be used. Since this theme was created to complement the Plasma theme [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde), it is assumed that [Noto](https://www.google.com/get/noto/) fonts are already installed.
+To utilize the custom font support in the theme, font releated files must also be included into the initramfs image. The provided install [script](install.sh) tries to identify the distribution in use and install the required build [hook](hooks) for that particular distribution. If no custom font is specified, the default font *Noto Sans* will be included instead. Since this theme was created to complement the Plasma theme [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde), it is assumed that [Noto](https://www.google.com/get/noto/) fonts are already installed on the system.
 
-The install [script](install.sh) will also automatically change which logotype to display depending on which distribution is identified.
+The install [script](install.sh) will also automatically change which logotype to display during boot, depending on which distribution is identified.
 
 See [limitations](README.md#limitations) below for more information and which distributions are supported.
 
