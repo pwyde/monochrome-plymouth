@@ -5,7 +5,7 @@
 </p>
 
 ## About
-Monochrome Plymouth is a fork of the well known [Breeze Plymouth](https://github.com/KDE/breeze-plymouth) theme created by [KDE](https://www.kde.org/). This fork was created to complement the [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde) theme for the Plasma 5 desktop environment.
+Monochrome Plymouth is a fork of the well known [Breeze Plymouth](https://github.com/KDE/breeze-plymouth) theme created by [KDE](https://www.kde.org/). This fork was created to complement the [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde) theme for the Plasma desktop environment.
 
 The original theme has been modified with the following:
 
@@ -14,11 +14,11 @@ The original theme has been modified with the following:
   - Partial support using the provided install [script](install.sh). See [details](README.md#details) below.
 - Modified graphical elements.
 - Removed 16bit framebuffer/output support.
-- Added support for automatic change of distribution logotype.
+- Support for automatic change of distribution logotype.
   - Partial support using the provided install [script](install.sh). See [details](README.md#details) below.
 
 ### Details
-Both this and the original theme relies on that the necesary files are included into the **initramfs** image. This is accomplished with the help of *build hooks*, which are sourced by the shell during runtime of *mkinitcpio* or *mkinitramfs* (depending on distribution).
+To work properly, the theme depends on that all the necesary files are included into the **initramfs** image. This is accomplished with the help of *build hooks*, which are sourced by the shell during runtime of *mkinitcpio* or *mkinitramfs* (depending on distribution).
 
 The original theme uses the Plymouth *[label](https://github.com/Jolicloud/plymouth/tree/master/src/plugins/controls/label)* [plugin](https://github.com/Jolicloud/plymouth/tree/master/src/plugins) to display text elements. Hence it must be added into the initramfs image along with its dependencies (i.e. [Pango](https://www.pango.org/)). This is not performed on all distributions. Arch Linux for example, does not and is solved by the Arch Linux specific [hook](hooks/monochrome-plymouth).
 
@@ -31,12 +31,20 @@ See [limitations](README.md#limitations) below for more information and which di
 ## Limitations
 At the time of writing not all distributions are supported, see list below. This is due to the fact that the theme relies on distribution specific build hooks.
 
-Supported distributions:
+**Linux Distribution Compaility**
+| **Distribution**                          | **Supported**      |
+|:------------------------------------------|:------------------:|
+| [Arch Linux](https://www.archlinux.org/)  | :heavy_check_mark: |
+| [CentOS](https://www.centos.org/)[^*]     | :x:                |
+| [Debian](https://www.debian.org/)[^*]     | :x:                |
+| [Fedora](https://getfedora.org/)[^*]      | :x:                |
+| [KDE Neon](https://neon.kde.org/)         | :heavy_check_mark: |
+| [Kubuntu](https://kubuntu.org/)[^*]       | :x:                |
+| [Manjaro](https://manjaro.org/)           | :heavy_check_mark: |
+| [openSUSE](https://www.opensuse.org/)[^*] | :x:                |
+| [Ubuntu](https://ubuntu.com/)[^*]         | :x:                |
 
-- [Arch Linux](https://www.archlinux.org/)
-- [KDE Neon](https://neon.kde.org/)
-
-Support for more distributions will hopefully be added in the future.
+[^*]: Support for distribution will hopefully be added in the future.
 
 ### Fonts
 If a custom font is specified, the source font file __must__ be located in the system fonts location of `/usr/share/fonts`. Otherwise the theme will not work properly. User specific font locations such as `~/.fonts` is not supported.
@@ -49,17 +57,17 @@ The installation script will automatically download the latest version from the 
 
 #### Install
 ```
-sh install.sh --install
+$ bash install.sh --install
 ```
 
 #### Uninstall
 ```
-sh install.sh --uninstall
+$ bash install.sh --uninstall
 ```
 
 #### Install with custom font
 ```
-sh install.sh --install --font /usr/share/fonts/TTF/DejaVuSans.ttf
+$ bash install.sh --install --font /usr/share/fonts/TTF/DejaVuSans.ttf
 ```
 
 #### Options
@@ -70,7 +78,7 @@ sh install.sh --install --font /usr/share/fonts/TTF/DejaVuSans.ttf
 | `-f`,`--font`      | Specify custom font to use. If not specified, *Noto Sans* will be used as the default. |
 | `-h`,`--help`      | Display help message including available options.                                      |
 
-### Arch Linux
+### Arch Linux & Manjaro
 After using the install script, add the custom build hook `monochrome-plymouth` to the `HOOKS` array in the `/etc/mkinitcpio.conf` configuration file.
 
 ```
@@ -116,9 +124,11 @@ A list of features and/or components that will be added in the future.
 
 - [ ] Add build hooks for:
   - [x] Arch Linux
+  - [ ] CentOS
   - [ ] Debian
   - [ ] Fedora
   - [x] KDE Neon
   - [ ] Kubuntu
-  - [ ] Manjaro
+  - [x] Manjaro
+  - [ ] openSUSE
   - [ ] Ubuntu
