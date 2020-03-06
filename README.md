@@ -1,10 +1,10 @@
-# Monochrome Plymouth - README
+# Monochrome Plymouth
 
 <p align="center">
     <img src="screenshots/kde-neon-encrypted-disk.png" alt="Preview of Monochrome Plymouth"/>
 </p>
 
-## About
+## :information_source: About
 Monochrome Plymouth is a fork of the well known [Breeze Plymouth](https://github.com/KDE/breeze-plymouth) theme created by [KDE](https://www.kde.org/). This fork was created to complement the [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde) theme for the Plasma desktop environment.
 
 The original theme has been modified with the following:
@@ -32,24 +32,24 @@ See [limitations](README.md#limitations) below for more information and which di
 At the time of writing not all distributions are supported, see list below. This is due to the fact that the theme relies on distribution specific build hooks.
 
 **Linux Distribution Compaility**
-| **Distribution**                          | **Supported**      |
-|:------------------------------------------|:------------------:|
-| [Arch Linux](https://www.archlinux.org/)  | :heavy_check_mark: |
-| [CentOS](https://www.centos.org/)[^*]     | :x:                |
-| [Debian](https://www.debian.org/)[^*]     | :x:                |
-| [Fedora](https://getfedora.org/)[^*]      | :x:                |
-| [KDE Neon](https://neon.kde.org/)         | :heavy_check_mark: |
-| [Kubuntu](https://kubuntu.org/)[^*]       | :x:                |
-| [Manjaro](https://manjaro.org/)           | :heavy_check_mark: |
-| [openSUSE](https://www.opensuse.org/)[^*] | :x:                |
-| [Ubuntu](https://ubuntu.com/)[^*]         | :x:                |
+| **Distribution**                                  | **Supported**      |
+|:--------------------------------------------------|:------------------:|
+| [Arch Linux](https://www.archlinux.org/)          | :heavy_check_mark: |
+| [CentOS](https://www.centos.org/)<sup>*</sup>     | :x:                |
+| [Debian](https://www.debian.org/)<sup>*</sup>     | :x:                |
+| [Fedora](https://getfedora.org/)<sup>*</sup>      | :x:                |
+| [KDE Neon](https://neon.kde.org/)                 | :heavy_check_mark: |
+| [Kubuntu](https://kubuntu.org/)<sup>*</sup>       | :x:                |
+| [Manjaro](https://manjaro.org/)                   | :heavy_check_mark: |
+| [openSUSE](https://www.opensuse.org/)<sup>*</sup> | :x:                |
+| [Ubuntu](https://ubuntu.com/)<sup>*</sup>         | :x:                |
 
-[^*]: Support for distribution will hopefully be added in the future.
+<sup>*</sup>Support for distribution will hopefully be added in the future.
 
 ### Fonts
 If a custom font is specified, the source font file __must__ be located in the system fonts location of `/usr/share/fonts`. Otherwise the theme will not work properly. User specific font locations such as `~/.fonts` is not supported.
 
-## Install Instructions
+## :floppy_disk: Install Instructions
 At the time of writing there are no packages available. Install the theme manually using `git clone` and see below for further instructions.
 
 ### Install Script
@@ -98,7 +98,7 @@ After using the install script, update the initramfs image with command below.
 # update-initramfs -u
 ```
 
-## Credits
+## :heart: Credits
 Some graphical elements and artwork in this project are modified versions from the following original sources:
 
 - **Arch Linux** [artwork](https://www.archlinux.org/art/).
@@ -116,10 +116,10 @@ Original code is written by the following:
 - **Alberto Milone**, <alberto.milone@canonical.com>
 - **Charlie Brej**, <cbrej@cs.man.ac.uk>
 
-## License
+## :page_with_curl: License
 This project is licensed under the **GNU General Public License v3.0**, as per the [original](https://cgit.kde.org/breeze-plymouth.git/tree/COPYING) theme. See the [LICENSE](LICENSE) file for more information.
 
-## Todo
+## :ballot_box_with_check: Todo
 A list of features and/or components that will be added in the future.
 
 - [ ] Add build hooks for:
