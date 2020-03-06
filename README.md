@@ -32,6 +32,7 @@ See [limitations](README.md#limitations) below for more information and which di
 At the time of writing not all distributions are supported, see list below. This is due to the fact that the theme relies on distribution specific build hooks.
 
 **Linux Distribution Compaility**
+
 | **Distribution**                                  | **Supported**      |
 |:--------------------------------------------------|:------------------:|
 | [Arch Linux](https://www.archlinux.org/)          | :heavy_check_mark: |
