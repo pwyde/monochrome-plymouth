@@ -28,10 +28,10 @@ The install [script](install.sh) will also automatically change which logotype t
 
 See [limitations](README.md#limitations) below for more information and which distributions are supported.
 
-## Limitations
+## :grey_exclamation: Limitations
 At the time of writing not all distributions are supported, see list below. This is due to the fact that the theme relies on distribution specific build hooks.
 
-**Linux Distribution Compaility**
+**Linux Distribution Compaility:**
 
 | **Distribution**                                  | **Supported**      |
 |:--------------------------------------------------|:------------------:|
