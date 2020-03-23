@@ -59,7 +59,7 @@
      id="namedview18"
      showgrid="false"
      inkscape:zoom="3.6875"
-     inkscape:cx="32"
+     inkscape:cx="-15.322034"
      inkscape:cy="32"
      inkscape:window-x="56"
      inkscape:window-y="30"
@@ -133,7 +133,8 @@
   </g>
   <g
      transform="matrix(0.85714285,0,0,0.85714285,20,16.999997)"
-     id="spinner">
+     id="spinner"
+     inkscape:label="#spinner">
     <rect
        id="rect10-3"
        style="fill-opacity:0;stroke-width:0.21538462"
