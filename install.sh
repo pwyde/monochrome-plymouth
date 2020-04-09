@@ -61,7 +61,7 @@ echo -e "
 
   ${yellow}${git_desc}${no_color}
   https://${git_hosting}/pwyde/${git_repo}
-" >&2
+" >&1
 }
 
 print_help() {
@@ -84,7 +84,7 @@ ${white}Options:${no_color}
   ${cyan}-f${no_color}, ${cyan}--font${no_color}         If not specified, 'Noto Sans' will be used as the default
                      font. Install theme with specified font instead, i.e.
                      '/usr/share/fonts/TTF/DejaVuSans.ttf'.
-" >&2
+" >&1
 }
 
 # Print help if no argument is specified.
@@ -121,7 +121,7 @@ print_msg() {
 }
 
 print_error() {
-    echo -e "$red=> ERROR:$no_color$white" "$@" "$no_color" >&1
+    echo -e "$red=> ERROR:$no_color$white" "$@" "$no_color" >&2
 }
 
 print_status() {
