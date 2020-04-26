@@ -1,8 +1,8 @@
 # Monochrome Plymouth
 
-<p align="center">
-    <img src="screenshots/kde-neon-encrypted-disk.png" alt="Preview of Monochrome Plymouth"/>
-</p>
+<div align="center">
+    <img src="screenshots/kde-neon-encrypted-disk.png" align="center" alt="Preview of Monochrome Plymouth"/>
+</div>
 
 ## :information_source: About
 Monochrome Plymouth is a fork of the well known [Breeze Plymouth](https://github.com/KDE/breeze-plymouth) theme created by [KDE](https://www.kde.org/). This fork was created to complement the [Monochrome KDE](https://gitlab.com/pwyde/monochrome-kde) theme for the Plasma desktop environment.
